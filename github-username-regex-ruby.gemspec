@@ -4,7 +4,7 @@ require_relative "lib/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "github-username-regex-ruby"
-  spec.version       = GHUR::VERSION
+  spec.version       = GitHubUsernameRegex::Version::VERSION
   spec.authors       = ["Grant Birkinbine"]
   spec.email         = "grant.birkinbine@gmail.com"
   spec.license       = "MIT"
