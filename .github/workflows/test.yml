@@ -22,7 +22,8 @@ jobs:
         with:
           bundler-cache: true
 
+      - name: bootstrap
+        run: script/bootstrap
+
       - name: test
-        run: |
-          bundle install
-          script/test -k
+        run: script/test -k
