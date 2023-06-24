@@ -23,4 +23,6 @@ jobs:
           bundler-cache: true
 
       - name: test
-        run: script/test -k
+        run: |
+          bundle install
+          script/test -k
