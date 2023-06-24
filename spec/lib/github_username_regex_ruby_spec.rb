@@ -6,7 +6,10 @@ require_relative "../../lib/github_username_regex_ruby"
 describe GitHubUsernameRegex do
   context "#check" do
     it "finds a valid username" do
-      expect(GitHubUsernameRegex.check("test")).to eq(true)
+      expect(GitHubUsernameRegex.check("GrantBirki")).to eq(true)
+      expect(GitHubUsernameRegex.check("MonaLisa")).to eq(true)
+      expect(GitHubUsernameRegex.check("hubot")).to eq(true)
+      expect(GitHubUsernameRegex.check("sup3r-cool-user123")).to eq(true)
     end
 
     it "finds a valid username with a dash" do
@@ -27,6 +30,14 @@ describe GitHubUsernameRegex do
 
     it "finds that a username is invalid due to special characters" do
       expect(GitHubUsernameRegex.check("mona!lisa")).to eq(false)
+    end
+
+    it "finds that a username is invalid due to double dashes" do
+      expect(GitHubUsernameRegex.check("mona--lisa")).to eq(false)
+    end
+
+    it "finds that a username is invalid due to an underscore" do
+      expect(GitHubUsernameRegex.check("mona_lisa")).to eq(false)
     end
   end
 end
