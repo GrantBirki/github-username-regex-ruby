@@ -7,6 +7,7 @@ Gem::Specification.new do |spec|
   spec.version       = GHUR::VERSION
   spec.authors       = ["Grant Birkinbine"]
   spec.email         = "grant.birkinbine@gmail.com"
+  spec.license       = "MIT"
 
   spec.summary       = "A lightweight Ruby Gem to check if a GitHub username / handle is valid"
   spec.description   = <<~SPEC_DESC
