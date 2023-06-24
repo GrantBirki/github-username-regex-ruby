@@ -39,5 +39,10 @@ describe GitHubUsernameRegex do
     it "finds that a username is invalid due to an underscore" do
       expect(GitHubUsernameRegex.check("mona_lisa")).to eq(false)
     end
+
+    it "is given bad input, and catches the error which still returns false" do
+      # in this case we pass a boolean instead of a string which will cause an error
+      expect(GitHubUsernameRegex.check(true)).to eq(false)
+    end
   end
 end
