@@ -39,3 +39,11 @@ The following regex pattern is used to check if a username is valid:
 ## Release 🚀
 
 To release a new version of this gem, simply edit the [`lib/version.rb`](lib/version.rb) in this repo. When you commit your changes to `main`, a new version will be automatically released via GitHub Actions to RubyGems and GitHub Packages.
+
+## Note 📝
+
+This Gem doesn't take reserved usernames into consideration. For example, it matches `help`, `about` and `pricing`, though they are reserved words and cannot be used as GitHub usernames
+
+## Credits 🙏
+
+This Gem is based on the following npm [package](https://github.com/shinnn/github-username-regex)
