@@ -19,11 +19,11 @@ gem install github-username-regex-ruby
 ## Usage 💻
 
 ```ruby
-require 'github-username-regex-ruby'
+require "github_username_regex_ruby"
 
 # Check if a username is valid
-GithubUsernameRegexRuby.valid?('GrantBirki') # => returns true
-GithubUsernameRegexRuby.valid?('some$bad_username-') # => returns false
+GitHubUsernameRegex.valid?("GrantBirki") # => returns true
+GitHubUsernameRegex.valid?("some$bad_username-") # => returns false
 ```
 
 ## Regex ⚙️
