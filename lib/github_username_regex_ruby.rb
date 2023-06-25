@@ -5,7 +5,7 @@ module GitHubUsernameRegex
   # check if a GitHub username is valid
   # :param username: the username to check (String)
   # :return: true if the username is valid, false if it is invalid (Boolean)
-  def self.check(username)
+  def self.valid?(username)
     # if the username is valid, return true
     if username.match(/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i)
       return true
