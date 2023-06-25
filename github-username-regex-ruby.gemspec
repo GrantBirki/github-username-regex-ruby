@@ -15,11 +15,12 @@ Gem::Specification.new do |spec|
   SPEC_DESC
 
   spec.homepage = "https://github.com/grantbirki/github-username-regex-ruby"
-  s.metadata    = {
+  spec.metadata    = {
     "source_code_uri" => "https://github.com/grantbirki/github-username-regex-ruby",
     "documentation_uri" => "https://github.com/grantbirki/github-username-regex-ruby",
     "bug_tracker_uri" => "https://github.com/grantbirki/github-username-regex-ruby/issues"
   }
+
   spec.required_ruby_version = Gem::Requirement.new(">= 3.0.0")
 
   spec.files = Dir["lib/**/*.rb"]
