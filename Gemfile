@@ -4,7 +4,7 @@ source "https://rubygems.org"
 
 group :development do
   gem "rspec", "~> 3.12"
-  gem "rubocop", "~> 1.57"
+  gem "rubocop", "~> 1.58"
   gem "rubocop-github", "~> 0.20"
   gem "rubocop-performance", "~> 1.19"
   gem "rubocop-rspec", "~> 2.25"
