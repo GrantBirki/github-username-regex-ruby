@@ -3,8 +3,8 @@
 source "https://rubygems.org"
 
 group :development do
-  gem "rspec", "~> 3.12"
-  gem "rubocop", "~> 1.59"
+  gem "rspec", "~> 3.13"
+  gem "rubocop", "~> 1.60"
   gem "rubocop-github", "~> 0.20"
   gem "rubocop-performance", "~> 1.20"
   gem "rubocop-rspec", "~> 2.26"
