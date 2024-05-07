@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Use GitHub App Token
-        uses: actions/create-github-app-token@78e5f2ddc08efcb88fbbee6cfa3fed770ba550c3 # pin@v1.9.1
+        uses: actions/create-github-app-token@a0de6af83968303c8c955486bf9739a57d23c7f1 # pin@v1.10.0
         id: app-token
         with:
           app-id: ${{ secrets.APP_ID }} # The ID of the GitHub App
