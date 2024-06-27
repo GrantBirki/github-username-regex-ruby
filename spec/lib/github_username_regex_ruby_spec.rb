@@ -40,6 +40,10 @@ describe GitHubUsernameRegex do
       expect(GitHubUsernameRegex.valid?("mona_lisa")).to eq(false)
     end
 
+    it "finds that a username is invalid due to a period" do
+      expect(GitHubUsernameRegex.valid?("mona.lisa")).to eq(false)
+    end
+
     it "is given bad input, and catches the error which still returns false" do
       # in this case we pass a boolean instead of a string which will cause an error
       expect(GitHubUsernameRegex.valid?(true)).to eq(false)
