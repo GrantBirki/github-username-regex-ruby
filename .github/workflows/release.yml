@@ -62,6 +62,13 @@ jobs:
         with:
           artifact-ids: ${{ needs.build.outputs.artifact-id }}
 
+      - name: debug
+        env:
+          ARTIFACT_PATH: ${{ env.ARTIFACT_PATH }}
+        run: |
+          ls -R
+          ls -lah $ARTIFACT_PATH
+
       - name: release
         env:
           GEM_NAME: ${{ needs.build.outputs.gem_name }}
