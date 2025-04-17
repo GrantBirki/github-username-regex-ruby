@@ -17,11 +17,15 @@ jobs:
       id-token: write
       packages: write
       attestations: write
-    uses: github/salsa/.github/workflows/ruby.yml@ruby-slsa-level-3
+    uses: grantbirki/salsa/.github/workflows/ruby.yml@main
     with:
       bootstrap_script: script/bootstrap
       build_script: script/build
-      publish_rubygems: false
-      publish_github_packages: false
-      push_github_release: false
-    secrets: inherit
+      auto_setup_ruby: true
+      publish_rubygems: true
+      publish_github_packages: true
+      push_github_release: true
+      sign: true
+      verify: true
+    secrets:
+      RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
