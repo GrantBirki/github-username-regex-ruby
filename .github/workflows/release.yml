@@ -56,18 +56,16 @@ jobs:
       id-token: write # needed for trusted publishing
 
     steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
       # this step will extract the artifact to ./artifact/${GEM_NAME}-${GEM_VERSION}.gem by default
       - name: actions/download-artifact
         uses: actions/download-artifact@54124fbd881f8ce794405a06896c93c49c17463e
         with:
           artifact-ids: ${{ needs.build.outputs.artifact-id }}
-
-      - name: debug
-        env:
-          ARTIFACT_PATH: ${{ env.ARTIFACT_PATH }}
-        run: |
-          ls -R
-          ls -lah $ARTIFACT_PATH
 
       - name: release
         env:
