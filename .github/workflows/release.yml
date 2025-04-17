@@ -10,11 +10,13 @@ on:
 
 permissions: {}
 
-env:
-  ARTIFACT_PATH: artifact
-
 jobs:
   release:
+    permissions:
+      contents: write
+      id-token: write
+      packages: write
+      attestations: write
     uses: github/salsa/.github/workflows/ruby.yml@ruby-slsa-level-3
     with:
       bootstrap_script: script/bootstrap
