@@ -14,105 +14,12 @@ env:
   ARTIFACT_PATH: artifact
 
 jobs:
-  build:
-    permissions:
-      contents: read
-    runs-on: ubuntu-latest
-    outputs:
-      artifact-id: "${{ steps.upload-artifact.outputs.artifact-id }}"
-      gem_name: "${{ steps.build.outputs.gem_name }}"
-      gem_version: "${{ steps.build.outputs.gem_version }}"
-      gem_path: "${{ steps.build.outputs.gem_path }}"
-
-    steps:
-      - name: checkout
-        uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-
-      - uses: ruby/setup-ruby@354a1ad156761f5ee2b7b13fa8e09943a5e8d252 # pin@v1.229.0
-        with:
-          bundler-cache: false
-
-      - name: bootstrap
-        run: script/bootstrap
-
-      - name: build
-        id: build
-        run: script/build
-
-      - name: upload artifact
-        uses: actions/upload-artifact@4.6.2
-        id: upload-artifact
-        with:
-          path: "${{ steps.build.outputs.gem_path }}"
-
   release:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write # needed for creating a release
-      packages: write # needed for publishing to GitHub packages
-      id-token: write # needed for trusted publishing
-
-    steps:
-      - name: checkout
-        uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-
-      # this step will extract the artifact to ./artifact/${GEM_NAME}-${GEM_VERSION}.gem by default
-      - name: actions/download-artifact
-        uses: actions/download-artifact@54124fbd881f8ce794405a06896c93c49c17463e
-        with:
-          artifact-ids: ${{ needs.build.outputs.artifact-id }}
-
-      - name: release
-        env:
-          GEM_NAME: ${{ needs.build.outputs.gem_name }}
-          GEM_VERSION: ${{ needs.build.outputs.gem_version }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ARTIFACT_PATH: ${{ env.ARTIFACT_PATH }}
-        run: |
-          gh release create "v${GEM_VERSION}" \
-            "${ARTIFACT_PATH}/${GEM_NAME}-${GEM_VERSION}.gem" \
-            --title "v${GEM_VERSION}" \
-            --generate-notes
-
-      - name: publish to GitHub packages
-        env:
-          OWNER: ${{ github.repository_owner }}
-          GEM_NAME: ${{ needs.build.outputs.gem_name }}
-          GEM_VERSION: ${{ needs.build.outputs.gem_version }}
-        run: |
-          GEM_HOST_API_KEY=${{ secrets.GITHUB_TOKEN }} gem push --KEY github --host https://rubygems.pkg.github.com/${OWNER} ${ARTIFACT_PATH}/${GEM_NAME}-${GEM_VERSION}.gem
-
-      - name: publish to RubyGems
-        env:
-          GEM_NAME: ${{ needs.build.outputs.gem_name }}
-          GEM_VERSION: ${{ needs.build.outputs.gem_version }}
-        run: |
-          mkdir -p ~/.gem
-          echo -e "---\n:rubygems_api_key: ${{ secrets.RUBYGEMS_API_KEY }}" > ~/.gem/credentials
-          chmod 0600 ~/.gem/credentials
-          gem push ${ARTIFACT_PATH}/${GEM_NAME}-${GEM_VERSION}.gem
-          rm ~/.gem/credentials
-
-  sign:
-    needs: [build, release]
-    permissions:
-      id-token: write
-      attestations: write
-      contents: read
-    uses: grantbirki/salsa/.github/workflows/sign-artifact.yml@main # my own fork
+    uses: github/salsa/.github/workflows/ruby.yml@ruby-slsa-level-3
     with:
-      artifact-ids: ${{ needs.build.outputs.artifact-id }}
-      artifact-path: "artifact/${{ needs.build.outputs.gem_path }}"
-
-  verify:
-    permissions: {}
-    needs: [build, release, sign]
-    uses: grantbirki/salsa/.github/workflows/verify.yml@main # my own fork
-    with:
-      artifact-ids: ${{ needs.build.outputs.artifact-id }}
-      artifact-path: "artifact/${{ needs.build.outputs.gem_path }}"
+      bootstrap_script: script/bootstrap
+      build_script: script/build
+      publish_rubygems: false
+      publish_github_packages: false
+      push_github_release: false
+    secrets: inherit
