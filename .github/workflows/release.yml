@@ -10,6 +10,9 @@ on:
 
 permissions: {}
 
+env:
+  ARTIFACT_PATH: artifact
+
 jobs:
   build:
     permissions:
@@ -53,6 +56,7 @@ jobs:
       id-token: write # needed for trusted publishing
 
     steps:
+      # this step will extract the artifact to ./artifact/${GEM_NAME}-${GEM_VERSION}.gem by default
       - name: actions/download-artifact
         uses: actions/download-artifact@54124fbd881f8ce794405a06896c93c49c17463e
         with:
@@ -63,9 +67,10 @@ jobs:
           GEM_NAME: ${{ needs.build.outputs.gem_name }}
           GEM_VERSION: ${{ needs.build.outputs.gem_version }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARTIFACT_PATH: ${{ env.ARTIFACT_PATH }}
         run: |
           gh release create "v${GEM_VERSION}" \
-            "${GEM_NAME}-${GEM_VERSION}.gem" \
+            "${ARTIFACT_PATH}/${GEM_NAME}-${GEM_VERSION}.gem" \
             --title "v${GEM_VERSION}" \
             --generate-notes
 
@@ -75,7 +80,7 @@ jobs:
           GEM_NAME: ${{ needs.build.outputs.gem_name }}
           GEM_VERSION: ${{ needs.build.outputs.gem_version }}
         run: |
-          GEM_HOST_API_KEY=${{ secrets.GITHUB_TOKEN }} gem push --KEY github --host https://rubygems.pkg.github.com/${OWNER} ${GEM_NAME}-${GEM_VERSION}.gem
+          GEM_HOST_API_KEY=${{ secrets.GITHUB_TOKEN }} gem push --KEY github --host https://rubygems.pkg.github.com/${OWNER} ${ARTIFACT_PATH}/${GEM_NAME}-${GEM_VERSION}.gem
 
       - name: publish to RubyGems
         env:
@@ -85,7 +90,7 @@ jobs:
           mkdir -p ~/.gem
           echo -e "---\n:rubygems_api_key: ${{ secrets.RUBYGEMS_API_KEY }}" > ~/.gem/credentials
           chmod 0600 ~/.gem/credentials
-          gem push ${GEM_NAME}-${GEM_VERSION}.gem
+          gem push ${ARTIFACT_PATH}/${GEM_NAME}-${GEM_VERSION}.gem
           rm ~/.gem/credentials
 
   sign:
@@ -97,7 +102,7 @@ jobs:
     uses: grantbirki/salsa/.github/workflows/sign-artifact.yml@main # my own fork
     with:
       artifact-ids: ${{ needs.build.outputs.artifact-id }}
-      artifact-path: ${{ needs.build.outputs.gem_path }}
+      artifact-path: "artifact/${{ needs.build.outputs.gem_path }}"
 
   verify:
     permissions: {}
@@ -105,4 +110,4 @@ jobs:
     uses: grantbirki/salsa/.github/workflows/verify.yml@main # my own fork
     with:
       artifact-ids: ${{ needs.build.outputs.artifact-id }}
-      artifact-path: ${{ needs.build.outputs.gem_path }}
+      artifact-path: "artifact/${{ needs.build.outputs.gem_path }}"
