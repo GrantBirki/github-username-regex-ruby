@@ -53,6 +53,11 @@ jobs:
       id-token: write # needed for trusted publishing
 
     steps:
+      - name: actions/download-artifact
+        uses: actions/download-artifact@54124fbd881f8ce794405a06896c93c49c17463e
+        with:
+          artifact-ids: ${{ needs.build.outputs.artifact-id }}
+
       - name: release
         env:
           GEM_NAME: ${{ needs.build.outputs.gem_name }}
