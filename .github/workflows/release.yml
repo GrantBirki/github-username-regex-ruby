@@ -110,8 +110,7 @@ jobs:
       artifact-path: "artifact/${{ needs.build.outputs.gem_path }}"
 
   verify:
-    permissions:
-      attestations: read
+    permissions: {}
     needs: [build, release, sign]
     uses: grantbirki/salsa/.github/workflows/verify.yml@main # my own fork
     with:
